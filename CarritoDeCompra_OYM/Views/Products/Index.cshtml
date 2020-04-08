@@ -1,0 +1,231 @@
+﻿@model IEnumerable<CarritoDeCompra_OYM.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h1>Lista De Productos en Ventas</h1>
+
+<link href="~/Content/DataTables/datatables.min.css" rel="stylesheet" />
+<link href="~/Content/SweeAlert2/sweetalert2.min.css" rel="stylesheet" />
+<p>
+    @*@Html.ActionLink("Create New", "Create")*@
+    @*@Html.ActionLink("Crear Nuevo", "Create", new { id = 1 }, new { @class = "btn btn-primary " })*@
+
+    @*<a asp-action="Create" class="btn btn-primary ">
+            <span aria-hidden="true" class="fa fa-plus"></span> Create New
+        </a>*@
+</p>
+
+@*<div class="" style="background: #F1EFED; border-radius: 10px 10px 10px 10px; ">
+    <div style="margin: 20px;  padding: 10px; ">*@
+
+<table class="table" id="IdTabla">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Category.CategoryName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Supplier.CompanyName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QuantityPerUnit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitsInStock)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitsOnOrder)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReorderLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Discontinued)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Photo)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.PhotoPath)
+                </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Supplier.CompanyName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuantityPerUnit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitsInStock)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitsOnOrder)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReorderLevel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Discontinued)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.Photo)*@
+                    @if (String.IsNullOrEmpty(item.PhotoBase64))
+                    {
+                        <img class="img-profile rounded-circle" src="~/Content/Img/no_foto.png" height="50" width="50" />
+                    }
+                    else
+                    {
+                        <img class="img-profile rounded-circle" src="@item.PhotoBase64" height="50" width="50" />
+
+                    }
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.PhotoPath)
+                    </td>*@
+            <td class="Agregar">
+                @*@Html.ActionLink("Edit", "Edit", new { id = item.ProductID }) |  // onclick="AgregarAlCarrito(@item.ProductID)"
+        @Html.ActionLink("Details", "Details", new { id = item.ProductID }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.ProductID })*@
+
+                @*<a asp-action='Details' onclick='CargarDatos(@item.ProductID);' class='btn btn-info' data-toggle='modal' data-target='#exampleModal'>
+            <span aria-hidden='true' class='glyphicon glyphicon-align-justify'></span>Agregar al Carrito
+        </a>*@
+                @*@if ( ViewBag.ExisteElProduct.Containt(item.ProductID))
+                {
+                <span>Entre..</span>
+                }*@
+                <a href="" class="btn btn-primary" ProductID="@item.ProductID" data-toggle="modal" data-target="#createEmployee">
+                    <span aria-hidden="true" class="glyphicon glyphicon-plus"></span>  Agregar al Carrito
+                </a>
+
+                <div  class="btn btn-warning hidden"  hidden>
+                    <span aria-hidden="true" class="glyphicon glyphicon-shopping-cart"></span> Ya esta en el Carrito
+                </div >
+            </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+@*</div>
+    </div>*@
+
+@*@section Scripts {
+    <link href="~/Content/DataTables/datatables.min.css" rel="stylesheet" />
+    <script src="~/Content/DataTables/datatables.min.js"></script>
+    <script>
+        /*
+            function AgregarAlCarrito(ProductID) {
+                debugger;
+                $.ajax({
+                    url: "/Orders/AgragarAlCarrito",
+                    method: 'POST',
+                    data: { ProductID: ProductID },
+                    type: "json",
+                    success: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+         */
+    </script>
+}*@
+
+@section Scripts {
+    <script src="~/Content/DataTables/datatables.min.js"></script>
+    <script src="~/Content/SweeAlert2/sweetalert2.all.min.js"></script>
+
+    <script>
+        var table = $('#IdTabla').DataTable();
+        $(document).ready(function () {
+         table
+        .column( 0 )
+        .data()
+        .each( function ( value, index ) {
+             console.log( 'Data in index: '+index+' is: '+value );
+            });
+         console.log( "ready!" );
+        });
+
+
+        $('#IdTabla tbody').on('click', 'td.Agregar a', function () {
+            debugger;
+            //var IdOrder = $(this).attr("orderID");
+            var IdProduct = $(this).attr("ProductID");
+            var tr = $(this).parents('tr');
+            var enlace =  $(this);
+            //--
+            $.ajax({
+                url: "/Orders/AgragarAlCarrito",
+                method: 'POST',
+                data: { ProductID: IdProduct },
+                type: "json",
+                success: function (data) {
+                    //console.log(data);
+                    //console.log("entro bien..");
+                    if (data == "Ok") {
+                        Swal.fire(
+                            'Agregado!',
+                            'El articulo ha sido agregado al carrito con exito.',
+                            'success'
+                        )
+                        //enlace.siblings().show();
+                        enlace.siblings().toggleClass("hidden");
+                        enlace.hide();
+
+                    }
+                    if (data == "Error") {
+                        Swal.fire(
+                            'Error!',
+                            'Ha ocurrido un error al agregar el articulo al carrito',
+                            'error'
+                        )
+                    }
+                   if (data == "YaExiste") {
+                        Swal.fire(
+                            'Informacion!',
+                            'El articulo ya se Encuetra en el carrito',
+                            'warning'
+                       )
+                       //enlace.siblings().show();
+                        enlace.siblings().toggleClass("hidden");
+                        enlace.hide();
+                    }
+                },
+                error: function (xhr) {
+                    Swal.fire(
+                        'Error!',
+                        'Ha ocurrido un error al agregar el articulo al carrito',
+                        'error'
+                    )
+                }
+            });
+            //--
+        });
+
+    </script>
+}

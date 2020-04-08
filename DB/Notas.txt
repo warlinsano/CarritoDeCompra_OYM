@@ -1,0 +1,70 @@
+/****** Script for SelectTopNRows command from SSMS  ******/
+SELECT TOP (1000) [OrderID]
+      ,[CustomerID]
+      ,[EmployeeID]
+      ,[OrderDate]
+      ,[RequiredDate]
+      ,[ShippedDate]
+      ,[ShipVia]
+      ,[Freight]
+      ,[ShipName]
+      ,[ShipAddress]
+      ,[ShipCity]
+      ,[ShipRegion]
+      ,[ShipPostalCode]
+      ,[ShipCountry]
+  FROM [Northwind].[dbo].[Orders]
+  where [CustomerID] ='ALFKI'
+
+
+SELECT TOP (1000) [OrderID]
+      ,[ProductID]
+      ,[UnitPrice]
+      ,[Quantity]
+      ,[Discount]
+  FROM [Northwind].[dbo].[Order Details]
+  where [OrderID] =12078
+
+
+
+
+
+JCE_Certificados
+user:  warlin_sano@gmail.com
+pas:  http://localhost:60440/Account/Register
+
+OnClientClick="return confirm('Seguro que desea Canselar la ediccion del Registro?');"
+
+SIFA_SistemaDeFacturacion
+https://dev-certificados.jce.do
+
+https://jsfiddle.net/9ux7u17o/1/
+https://sweetalert2.github.io/
+https://www.c-sharpcorner.com/article/asp-net-mvc-form-with-file-upload/
+
+note-icon-picture
+note-codable
+
+
+https://rstopup.com/donde-almacenar-portador-token-en-mvc-web-api.html
+https://summernote.org/examples/
+https://aprenderaprogramar.com/foros/index.php?topic=3580.0
+
+WYSIWYG
+OAuth
+
+https://localhost:44318/Categoria/Index
+https://localhost:44310/api/Categorias/GetCategoria?id=1
+
+EXPRECIONES REGULARES: 
+https://lenguajehtml.com/p/html/formularios/validaciones-html5
+
+https://localhost:44343/Categories
+
+https://www.red-gate.com/simple-talk/dotnet/asp-net/modal-input-forms-in-asp-net-mvc/
+
+https://localhost:44310/api/Categorias/GetCategoriaByID?id=1
+
+tutorialsteacher
+https://www.tutorialsteacher.com/webapi/action-method-return-type-in-web-api
+Fluent API

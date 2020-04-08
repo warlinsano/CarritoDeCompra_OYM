@@ -1,0 +1,195 @@
+﻿
+
+
+@model IEnumerable<CarritoDeCompra_OYM.Models.Order_Detail>
+
+@{
+    ViewBag.Title = "Index";
+}
+<link href="~/Content/DataTables/datatables.min.css" rel="stylesheet" />
+<link href="~/Content/SweeAlert2/sweetalert2.min.css" rel="stylesheet" />
+
+<h2>Productos agragados al Carrito </h2>
+
+
+
+<table class="table" id="IdTabla">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Product.Photo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.CustomerID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Discount)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (String.IsNullOrEmpty(item.Product.PhotoBase64))
+                    {
+                        <img class="img-profile rounded-circle" src="~/Content/Img/no_foto.png" height="50" width="50" />
+                    }
+                    else
+                    {
+                        <img class="img-profile rounded-circle" src="@item.Product.PhotoBase64" height="50" width="50" />
+
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Order.CustomerID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Discount)
+                </td>
+                <td class="Eliminar">
+                       @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |    onclick="RemoverDelCarrito(@item.OrderID, @item.ProductID)"
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                    <a href="" class="btn btn-danger" data-toggle="modal" data-target="#createEmployee" orderID="@item.OrderID" ProductID="@item.ProductID">
+                        <span aria-hidden="true" class="glyphicon glyphicon-remove"></span> Eliminar del Carrito
+                    </a>
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+
+<div class="botonComprar" hidden>
+
+    <button type="button" class="btn btn-primary btn-lg btn-block">
+        <span aria-hidden="true" class="glyphicon glyphicon-shopping-cart"></span>  pagar por poductos
+    </button>
+
+</div>
+
+@section Scripts {
+
+    <script src="~/Content/DataTables/datatables.min.js"></script>
+    <script src="~/Content/SweeAlert2/sweetalert2.all.min.js"></script>
+
+    <script>
+        var table = $('#IdTabla').DataTable();
+
+        $(document).ready(function () {
+            MostrarBtn_Comparar();
+        });
+
+        function MostrarBtn_Comparar() {
+            if (!table.data().count()) {
+                debugger;
+                //alert( 'Empty table' );
+                $(".botonComprar").hide();
+            }
+            else {
+                $(".botonComprar").show();
+            }
+        }
+
+        $('#IdTabla tbody').on('click', 'td.Eliminar a', function () {
+            //debugger;
+            var IdOrder = $(this).attr("orderID");
+            var IdProduct = $(this).attr("ProductID");
+            var tr = $(this).parents('tr');
+
+             Swal.fire({
+                          title: 'Estás seguro?',
+                          text: "¡Si hace esto el articulo se eliminara del carrito!",
+                          icon: 'warning',
+                          showCancelButton: true,
+                          confirmButtonColor: '#3085d6',
+                          cancelButtonColor: '#d33',
+                          confirmButtonText: 'Si, Eliminalo!'
+                        }).then((result) => {
+                            if (result.value) {                     
+            //--
+           $.ajax({
+                url: "/Orders/RemoverDelCarrito",
+                method: 'POST',
+                data: { OrderID: IdOrder, ProductID: IdProduct },
+                type: "json",
+                success: function (data) {
+                    //console.log(data);
+                    //console.log("entro bien..");
+                    if (data == "Ok") { 
+                        table
+                            .row(tr)
+                            .remove()
+                            .draw();
+
+                             MostrarBtn_Comparar();
+
+                         Swal.fire(
+                                  'Eliminado!',
+                                  'El articulo a sido eliminado del carrito con exito.',
+                                  'success'
+                                  )   
+                    }
+                    if (data == "Error"){
+                        Swal.fire(
+                                  'Error!',
+                                  'Ha ocurrido un error al eliminar el articulo del carrito',
+                                  'warning'
+                                  )   
+                    }
+                },
+                error: function (xhr) {
+                        Swal.fire(
+                                 'Error!',
+                                 'Ha ocurrido un error al remover el Articulo',
+                                 'warning'
+                                )   
+                }
+             });
+            //--
+               }
+           })                                 
+        });
+
+        function RemoverDelCarrito(OrderID, ProductID) {
+            debugger;
+            $.ajax({
+                url: "/Orders/RemoverDelCarrito",
+                method: 'POST',
+                data: { OrderID: OrderID, ProductID: ProductID },
+                type: "json",
+                success: function (data) {
+                    console.log(data);
+                    console.log("entro bien..");
+                },
+                error: function (xhr) {
+                    //debugger;
+                    console.log(xhr.responseText);
+                    alert("Error has occurred..");
+                }
+            });
+        }
+
+    </script>
+}
